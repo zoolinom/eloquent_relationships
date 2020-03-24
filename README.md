@@ -2,6 +2,6 @@
 
 - [x] One to one
 - [x] One to many
-- [] Many to many
+- [x] Many to many
 - [] Has many through
 - [] Polymorfic relations
