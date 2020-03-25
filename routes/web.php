@@ -50,3 +50,20 @@ Route::get('/posts', function () {
 
     return response()->json($tagsCount);
 });
+
+Route::get('/posts/affiliation/{affiliation}', function (App\Affiliation $affiliation) {
+    $posts = $affiliation->posts;
+
+    return response()->json($posts);
+});
+
+Route::get('/posts/affiliation/{affiliation}/tags', function (App\Affiliation $affiliation) {
+    $posts = $affiliation->posts()->with('tags')->get();
+
+    $tags = $posts->map(function ($item) {
+        return [$item->id => $item->tags];
+    });
+
+    return response()->json($tags);
+});
+
