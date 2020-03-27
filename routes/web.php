@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,3 +69,69 @@ Route::get('/posts/affiliation/{affiliation}/tags', function (App\Affiliation $a
     return response()->json($tags);
 });
 
+Route::get('/videos/all', function () {
+    $videos = App\Video::whereHasMorph(
+        'watchable',
+        ['App\Series', 'App\Collection']
+    )->get();
+
+    return response()->json($videos);
+});
+
+Route::get('/videos/series', function () {
+    $videos = App\Video::whereHasMorph(
+        'watchable',
+        'App\Series'
+    )->get();
+
+    return response()->json($videos);
+});
+
+Route::get('/videos/collection', function () {
+    $videos = App\Video::whereHasMorph(
+        'watchable',
+        'App\Collection'
+    )->get();
+
+    return response()->json($videos);
+});
+
+Route::get('/videos/{name}', function (Request $request) {
+    $videos = App\Video::whereHasMorph(
+        'watchable',
+        ['App\Series', 'App\Collection'],
+        function(Builder $query) use ($request) {
+            $query->where('title', 'like', $request->name . '%');
+        }
+    )->get();
+
+    return response()->json($videos);
+});
+
+Route::get('/series/{series}/add/video', function (App\Series $series) {
+    $video = new App\Video([
+        'title' => 'Some series video title',
+        'description' => 'Some series video description',
+        'url' => 'Some url'
+    ]);
+    $series->videos()->save($video);
+
+    return response()->json($video);
+});
+
+Route::get('/collection/{collection}/add/video', function (App\Collection $collection) {
+    $video = new App\Video([
+        'title' => 'Some collection video title',
+        'description' => 'Some collection video description',
+        'url' => 'Some url'
+    ]);
+    $collection->videos()->save($video);
+
+    return response()->json($video);
+});
+
+Route::get('/videos/{video}/all', function (App\Video $video) {
+    $watchables = $video->watchable;
+
+    return response()->json($watchables);
+});
