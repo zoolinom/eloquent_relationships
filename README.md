@@ -4,4 +4,5 @@
 - [x] One to many
 - [x] Many to many
 - [x] Has many through
-- [] Polymorfic relations
+- [x] Polymorfic relations
+- [] Many-to-many polymorfic
