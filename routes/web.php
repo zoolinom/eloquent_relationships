@@ -135,3 +135,15 @@ Route::get('/videos/{video}/all', function (App\Video $video) {
 
     return response()->json($watchables);
 });
+
+Route::get('/user/{user}/liked/posts', function (App\User $user) {
+    $posts = $user->postms;
+
+    return response()->json($posts);
+});
+
+Route::get('/user/{user}/liked/comments', function (App\User $user) {
+    $comment = $user->comments;
+
+    return response()->json($comment);
+});
